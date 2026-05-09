@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>タスクエントリー</title>
+</head>
+<body>
+    <h4>タスクの追加/編集</h4>
+    {% if task_id %}
+    <form action="{% url 'sample_app:edit_task' task_id=task_id %}" method="post">
+    {% else %}
+    <form action="{% url 'sample_app:create_task' %}" method="post">
+    {% endif %}
+      {% csrf_token %}
+      {{ form }}
+          <button type="submit">送信</button>
+    </form>
+    <a href="{% url 'sample_app:read_task' %}">戻る</a>
+</body>
+</html>
