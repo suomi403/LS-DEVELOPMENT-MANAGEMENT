@@ -26,13 +26,13 @@
           <td>{{ task.create_date }}</td>
           <td>{{ task.complete_date }}</td>
           <td>
-            <a href="{% url 'sample_app:edit_task' task_id=task.task_id %}">修正</a>
-            <a href="{% url 'sample_app:delete_task' task_id=task.task_id %}">削除</a>
+            <a href="{% url 'suomi_app:edit_task' task_id=task.task_id %}">修正</a>
+            <a href="{% url 'suomi_app:delete_task' task_id=task.task_id %}">削除</a>
           </td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
-    <a href="{% url 'sample_app:create_task' %}">作成</a>
+    <a href="{% url 'suomi_app:create_task' %}">作成</a>
   </body>
 </html>

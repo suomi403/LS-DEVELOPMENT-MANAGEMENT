@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.forms import ModelForm
 from django.utils import timezone
 
-from sample_app.models import Task
+from suomi_app.models import Task
 
 
 def create_task(request):
@@ -16,7 +16,7 @@ def create_task(request):
     if request.method == 'GET':
         form = TaskForm(instance=task)
         return render(request,
-                      'sample_app/task_form.html',  # 呼び出す Template
+                      'suomi_app/task_form.html',  # 呼び出す Template
                       {'form': form})  # Template に渡すデータ
 
     # 実行ボタン押下時
@@ -29,7 +29,7 @@ def create_task(request):
             task = form.save(commit=False)
             task.save()
 
-        return redirect('sample_app:read_task')
+        return redirect('suomi_app:read_task')
 
 
 def read_task(request):
@@ -39,7 +39,7 @@ def read_task(request):
     # 全オブジェクトを取得
     tasks = Task.objects.all().filter(delete_flag=False, complete_flag=False).order_by('task_id')
     return render(request,
-                  'sample_app/task_list.html',  # 呼び出す Template
+                  'suomi_app/task_list.html',  # 呼び出す Template
                   {'tasks': tasks})  # Template に渡すデータ
 
 
@@ -54,7 +54,7 @@ def edit_task(request, task_id):
     if request.method == 'GET':
         form = TaskForm(instance=task)
         return render(request,
-                      'sample_app/task_form.html',  # 呼び出す Template
+                      'suomi_app/task_form.html',  # 呼び出す Template
                       {'form': form, 'task_id': task_id})  # Template に渡すデータ
 
     # 実行ボタン押下時
@@ -67,7 +67,7 @@ def edit_task(request, task_id):
             task = form.save(commit=False)
             task.save()
 
-        return redirect('sample_app:read_task')
+        return redirect('suomi_app:read_task')
 
 
 def complete_task(request, task_id):
@@ -79,7 +79,7 @@ def complete_task(request, task_id):
     task.complete_flag = True
     task.complete_date = timezone.now()
     task.save()
-    return redirect('sample_app:read_task')
+    return redirect('suomi_app:read_task')
 
 
 def delete_task(request, task_id):
@@ -87,7 +87,7 @@ def delete_task(request, task_id):
     task = get_object_or_404(Task, pk=task_id)
     task.delete_flag = True
     task.save()
-    return redirect('sample_app:read_task')
+    return redirect('suomi_app:read_task')
 
 
 class TaskForm(ModelForm):

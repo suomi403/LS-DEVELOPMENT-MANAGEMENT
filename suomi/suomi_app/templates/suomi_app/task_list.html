@@ -22,13 +22,13 @@
           <td>{{ task.task_detail }}</td>
           <td>{{ task.deadline }}</td>
           <td>
-            <a href="{% url 'sample_app:edit_task' task_id=task.task_id %}">修正</a>
-            <a href="{% url 'sample_app:complete_task' task_id=task.task_id %}">完了</a>
+            <a href="{% url 'suomi_app:edit_task' task_id=task.task_id %}">修正</a>
+            <a href="{% url 'suomi_app:complete_task' task_id=task.task_id %}">完了</a>
           </td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
-    <a href="{% url 'sample_app:create_task' %}">作成</a>
+    <a href="{% url 'suomi_app:create_task' %}">作成</a>
   </body>
 </html>
