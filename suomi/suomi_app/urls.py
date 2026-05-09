@@ -1,8 +1,8 @@
 from django.urls import path
-from sample_app import views
+from suomi_app import views
 
 
-app_name = 'sample_app'
+app_name = 'suomi_app'
 urlpatterns = [
     path('task/create/', views.create_task, name='create_task'),  # 作成
     path('task/edit/<int:task_id>/', views.edit_task, name='edit_task'),  # 修正
