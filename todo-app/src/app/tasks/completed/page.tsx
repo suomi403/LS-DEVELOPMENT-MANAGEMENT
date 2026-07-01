@@ -1,23 +1,36 @@
-import Link from 'next/link';
-import { getRequestContext } from '@cloudflare/next-on-pages';
+import Link from "next/link";
+import { getRequestContext } from "@cloudflare/next-on-pages";
 
-export const runtime = 'edge';
+export const runtime = "edge";
+
+// キャッシュを無効化し、常に最新のDB状態を反映させる
+export const revalidate = 0;
 
 async function getCompletedTasks() {
   const db = getRequestContext().env.DB;
-  const { results } = await db
-    .prepare("SELECT * FROM tasks WHERE is_completed = 1 ORDER BY complete_date DESC")
-    .all();
-  return results;
+  try {
+    const { results } = await db
+      .prepare(
+        "SELECT * FROM tasks WHERE is_completed = 1 ORDER BY complete_date DESC",
+      )
+      .all();
+    return results;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
 }
 
 export default async function CompletedTaskList() {
   const tasks = await getCompletedTasks();
 
   return (
-    <main>
+    <main style={{ padding: "20px" }}>
       <h1>完了済みタスク</h1>
-      <table>
+      <table
+        border={1}
+        style={{ borderCollapse: "collapse", width: "100%", textAlign: "left" }}
+      >
         <thead>
           <tr>
             <th>タスクID</th>
@@ -41,9 +54,23 @@ export default async function CompletedTaskList() {
               <td>
                 <Link href={`/tasks/edit/${task.task_id}`}>修正</Link>
                 {" | "}
-                <form action={`/api/tasks/delete`} method="POST" style={{ display: 'inline' }}>
+                {/* 💡 送信先を api/ 配下の正しいパスに指定 */}
+                <form
+                  action="/api/tasks/delete"
+                  method="POST"
+                  style={{ display: "inline" }}
+                >
                   <input type="hidden" name="task_id" value={task.task_id} />
-                  <button type="submit" onClick={() => !confirm('削除しますか？') && event?.preventDefault()}>削除</button>
+                  <button
+                    type="submit"
+                    onSubmit={(e) => {
+                      if (!confirm("削除しますか？")) {
+                        e.preventDefault();
+                      }
+                    }}
+                  >
+                    削除
+                  </button>
                 </form>
               </td>
             </tr>

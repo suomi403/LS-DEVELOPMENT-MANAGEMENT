@@ -1,45 +1,40 @@
-import Link from 'next/link';
+export const runtime = "edge";
 
-interface TaskFormProps {
-  task?: {
-    task_id?: number;
-    task_name: string;
-    task_detail: string;
-    deadline: string;
-  };
-}
-
-export default function TaskForm({ task }: TaskFormProps) {
-  const isEdit = !!task?.task_id;
-  // 送信先のAPIエンドポイントを条件分岐
-  const actionUrl = isEdit ? `/api/tasks/edit` : `/api/tasks/create`;
-
+export default function CreateTaskPage() {
   return (
-    <main>
-      <h4>タスクの追加/編集</h4>
-      <form action={actionUrl} method="POST">
-        {isEdit && <input type="hidden" name="task_id" value={task.task_id} />}
-        
+    <main style={{ padding: "20px" }}>
+      <h2>タスクの追加</h2>
+      <form
+        action="/api/tasks"
+        method="POST"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "10px",
+          maxWidth: "300px",
+        }}
+      >
         <div>
-          <label>タスク名: </label>
-          <input type="text" name="task_name" defaultValue={task?.task_name || ''} required />
+          <label style={{ display: "block" }}>タスク名:</label>
+          <input
+            type="text"
+            name="task_name"
+            required
+            style={{ width: "100%" }}
+          />
         </div>
-        
         <div>
-          <label>タスク概要: </label>
-          <textarea name="task_detail" defaultValue={task?.task_detail || ''} />
+          <label style={{ display: "block" }}>タスク概要:</label>
+          <textarea name="task_detail" style={{ width: "100%" }} />
         </div>
-        
         <div>
-          <label>期限: </label>
-          <input type="date" name="deadline" defaultValue={task?.deadline || ''} />
+          <label style={{ display: "block" }}>期限:</label>
+          <input type="date" name="deadline" style={{ width: "100%" }} />
         </div>
-
-        <br />
-        <button type="submit">送信</button>
+        <button type="submit" style={{ marginTop: "10px", cursor: "pointer" }}>
+          送信
+        </button>
       </form>
-      <br />
-      <Link href="/tasks">戻る</Link>
     </main>
   );
 }
