@@ -5,7 +5,7 @@ export default function CreateTaskPage() {
     <main style={{ padding: "20px" }}>
       <h2>タスクの追加</h2>
       <form
-        action="/api/tasks"
+        action="/api/tasks/create"
         method="POST"
         style={{
           display: "flex",
