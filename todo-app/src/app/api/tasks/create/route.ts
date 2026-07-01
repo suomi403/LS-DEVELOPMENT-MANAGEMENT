@@ -15,7 +15,9 @@ export async function POST(request: NextRequest) {
     const db = (process.env as any).DB;
 
     if (!db) {
-      throw new Error("Database binding 'DB' is not available.");
+      throw new Error(
+        "D1データベースバインディング 'DB' が見つかりません。 [本番環境の場合] Cloudflare Pagesダッシュボードの Settings -> Functions -> D1 database bindings にて Variable name = 'DB', Database = 'tasks' の設定を行ってください。[ローカル開発の場合] Wrangler を使用してローカル環境を起動してください (例: npx wrangler pages dev)"
+      );
     }
 
     // D1データベースへの挿入処理を実行
