@@ -41,16 +41,16 @@ export default function RootLayout({
             📋 タスク管理
           </h2>
           <nav style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-            <Link href="/" style={{ color: "#4b5563", textDecoration: "none", fontSize: "14px", padding: "8px 12px", borderRadius: "6px", fontWeight: "bold" }}>
+            <Link href="/" className="nav-link">
               🏠 ホーム
             </Link>
-            <Link href="/tasks" style={{ color: "#4b5563", textDecoration: "none", fontSize: "14px", padding: "8px 12px", borderRadius: "6px", fontWeight: "bold" }}>
+            <Link href="/tasks" className="nav-link">
               📋 タスク一覧
             </Link>
-            <Link href="/tasks/create" style={{ color: "#4b5563", textDecoration: "none", fontSize: "14px", padding: "8px 12px", borderRadius: "6px", fontWeight: "bold" }}>
+            <Link href="/tasks/create" className="nav-link">
               ➕ 新しいタスクを追加
             </Link>
-            <Link href="/tasks/completed" style={{ color: "#4b5563", textDecoration: "none", fontSize: "14px", padding: "8px 12px", borderRadius: "6px", fontWeight: "bold" }}>
+            <Link href="/tasks/completed" className="nav-link">
               ✅ 完了済みのタスク
             </Link>
           </nav>
@@ -59,11 +59,11 @@ export default function RootLayout({
         {/* メインコンテンツ */}
         <main style={{ flex: 1, padding: "40px", display: "flex", flexDirection: "column", overflowY: "auto" }}>
           <div style={{
-            maxWidth: "800px",
+            maxWidth: "720px",
             width: "100%",
             margin: "0 auto",
             backgroundColor: "#ffffff",
-            padding: "30px",
+            padding: "30px 45px",
             borderRadius: "8px",
             boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
             border: "1px solid #e5e7eb"
