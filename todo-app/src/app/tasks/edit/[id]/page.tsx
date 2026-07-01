@@ -26,6 +26,12 @@ async function getTask(id: string) {
   }
 }
 
+function formatDate(dateStr: string | null | undefined): string {
+  if (!dateStr) return "";
+  const match = dateStr.match(/^\d{4}-\d{2}-\d{2}/);
+  return match ? match[0] : "";
+}
+
 export default async function EditTaskPage({ params }: EditPageProps) {
   const { id } = await params;
   const task: any = await getTask(id);
@@ -70,7 +76,7 @@ export default async function EditTaskPage({ params }: EditPageProps) {
           <input
             type="date"
             name="deadline"
-            defaultValue={task.deadline}
+            defaultValue={formatDate(task.deadline)}
             style={{ width: "100%" }}
           />
         </div>
