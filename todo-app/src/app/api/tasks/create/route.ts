@@ -10,17 +10,17 @@ export async function POST(request: NextRequest) {
     const task_detail = formData.get("task_detail");
     const deadline = formData.get("deadline");
 
-    // 💡 CloudflareのコンテキストからDBバインディングを取得
+    // CloudflareのコンテキストからDBバインディングを取得
     const { env } = getRequestContext();
 
-    // D1データベースへの挿入処理を実行
+    // D1データベースへの挿入処理を実行（is_completed の初期値 0 を明示的に指定）
     await env.DB.prepare(
-      "INSERT INTO tasks (task_name, task_detail, deadline) VALUES (?, ?, ?)",
+      "INSERT INTO tasks (task_name, task_detail, deadline, is_completed) VALUES (?, ?, ?, 0)",
     )
       .bind(task_name, task_detail, deadline)
       .run();
 
-    // 登録完了後、一覧ページへリダイレクト
+    // 登録完了後、タスク一覧ページ（/tasks）へリダイレクト
     return NextResponse.redirect(new URL("/tasks", request.url), 303);
   } catch (error) {
     console.error(error);
