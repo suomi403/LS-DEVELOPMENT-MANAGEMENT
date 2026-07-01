@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { getRequestContext } from "@cloudflare/next-on-pages";
 
 export const runtime = "edge";
 
@@ -7,8 +6,14 @@ export const runtime = "edge";
 export const revalidate = 0;
 
 async function getCompletedTasks() {
-  const db = getRequestContext().env.DB;
   try {
+    // 💡 OpenNext環境では process.env から直接バインディング（DB）にアクセスします
+    const db = (process.env as any).DB;
+
+    if (!db) {
+      throw new Error("Database binding 'DB' is not available.");
+    }
+
     const { results } = await db
       .prepare(
         "SELECT * FROM tasks WHERE is_completed = 1 ORDER BY complete_date DESC",
@@ -54,7 +59,7 @@ export default async function CompletedTaskList() {
               <td>
                 <Link href={`/tasks/edit/${task.task_id}`}>修正</Link>
                 {" | "}
-                {/* 💡 送信先を api/ 配下の正しいパスに指定 */}
+                {/* 送信先を api/ 配下の正しいパスに指定 */}
                 <form
                   action="/api/tasks/delete"
                   method="POST"

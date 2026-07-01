@@ -1,4 +1,3 @@
-import { getRequestContext } from "@cloudflare/next-on-pages";
 import { NextRequest, NextResponse } from "next/server";
 
 export const runtime = "edge";
@@ -10,17 +9,22 @@ export async function POST(request: NextRequest) {
     const task_detail = formData.get("task_detail");
     const deadline = formData.get("deadline");
 
-    // CloudflareのコンテキストからDBバインディングを取得
-    const { env } = getRequestContext();
+    // 💡 OpenNext環境では process.env から直接バインディング（DB）にアクセスします
+    const db = (process.env as any).DB;
 
-    // D1データベースへの挿入処理を実行（is_completed の初期値 0 を明示的に指定）
-    await env.DB.prepare(
-      "INSERT INTO tasks (task_name, task_detail, deadline, is_completed) VALUES (?, ?, ?, 0)",
-    )
+    if (!db) {
+      throw new Error("Database binding 'DB' is not available.");
+    }
+
+    // D1データベースへの挿入処理を実行
+    await db
+      .prepare(
+        "INSERT INTO tasks (task_name, task_detail, deadline, is_completed) VALUES (?, ?, ?, 0)",
+      )
       .bind(task_name, task_detail, deadline)
       .run();
 
-    // 登録完了後、タスク一覧ページ（/tasks）へリダイレクト
+    // 登録完了後、タスク一覧ページへリダイレクト
     return NextResponse.redirect(new URL("/tasks", request.url), 303);
   } catch (error) {
     console.error(error);

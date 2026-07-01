@@ -1,22 +1,22 @@
-import { getRequestContext } from "@cloudflare/next-on-pages";
 import { notFound } from "next/navigation";
 
 export const runtime = "edge";
-
-// キャッシュを無効化し、常に最新のDB状態を反映させる
 export const revalidate = 0;
 
 interface EditPageProps {
   params: Promise<{ id: string }>;
 }
 
-// 💡 D1データベースから指定されたIDのタスク詳細を取得
+// 💡 process.env を使用するように修正
 async function getTask(id: string) {
-  const { env } = getRequestContext();
   try {
-    const task = await env.DB.prepare(
-      "SELECT task_id, task_name, task_detail, deadline FROM tasks WHERE task_id = ?",
-    )
+    const db = (process.env as any).DB;
+    if (!db) throw new Error("Database binding 'DB' is not available.");
+
+    const task = await db
+      .prepare(
+        "SELECT task_id, task_name, task_detail, deadline FROM tasks WHERE task_id = ?",
+      )
       .bind(id)
       .first();
 
@@ -28,13 +28,9 @@ async function getTask(id: string) {
 }
 
 export default async function EditTaskPage({ params }: EditPageProps) {
-  // Next.js 15の仕様に従い、paramsをawaitしてURLのIDを取得
   const { id } = await params;
-
-  // 編集対象のデータを取得
   const task: any = await getTask(id);
 
-  // タスクが存在しない場合は404エラー画面を表示
   if (!task) {
     notFound();
   }
@@ -42,8 +38,6 @@ export default async function EditTaskPage({ params }: EditPageProps) {
   return (
     <main style={{ padding: "20px" }}>
       <h2>タスクの編集 (ID: {id})</h2>
-
-      {/* 💡 送信先を物理分割したAPIパスに変更 */}
       <form
         action={`/api/tasks/edit/${id}`}
         method="POST"
