@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:preview": "opennextjs-cloudflare build && wrangler pages dev .open-next/assets --compatibility-date 2026-06-30 --compatibility-flags nodejs_compat --d1 DB=dc95d86c-c171-4d10-8bca-5e644267c021 --script-path ../.open-next/worker.js",
     "build": "next build",
     "build:cloudflare": "npx @opennextjs/cloudflare build",
     "start": "next start",
