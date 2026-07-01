@@ -1,5 +1,3 @@
-export const runtime = "edge";
-
 export default function CreateTaskPage() {
   return (
     <main style={{ padding: "20px" }}>

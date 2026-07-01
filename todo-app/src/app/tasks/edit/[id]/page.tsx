@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 
-export const runtime = "edge";
 export const revalidate = 0;
 
 interface EditPageProps {
