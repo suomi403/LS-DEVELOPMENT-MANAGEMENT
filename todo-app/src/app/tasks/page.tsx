@@ -1,7 +1,5 @@
 import Link from "next/link";
 
-export const runtime = "edge";
-
 // キャッシュを無効化し、毎回最新のDBデータを取得する設定
 export const revalidate = 0;
 
