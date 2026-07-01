@@ -4,8 +4,12 @@ export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const task_name = formData.get("task_name");
-    const task_detail = formData.get("task_detail");
-    const deadline = formData.get("deadline");
+    const task_detail = formData.get("task_detail") || "";
+    const deadline = formData.get("deadline") || null;
+
+    if (!task_name) {
+      return NextResponse.json({ error: "タスク名は必須です" }, { status: 400 });
+    }
 
     // 💡 OpenNext環境では process.env から直接バインディング（DB）にアクセスします
     const db = (process.env as any).DB;
@@ -24,10 +28,13 @@ export async function POST(request: NextRequest) {
 
     // 登録完了後、タスク一覧ページへリダイレクト
     return NextResponse.redirect(new URL("/tasks", request.url), 303);
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
     return NextResponse.json(
-      { error: "データベース登録に失敗しました" },
+      {
+        error: "データベース登録に失敗しました",
+        details: error?.message || String(error),
+      },
       { status: 500 },
     );
   }
