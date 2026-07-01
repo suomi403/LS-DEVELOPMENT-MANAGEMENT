@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
     // D1データベースへの挿入処理を実行
     await db
       .prepare(
-        "INSERT INTO tasks (task_name, task_detail, deadline, is_completed) VALUES (?, ?, ?, 0)",
+        "INSERT INTO tasks (task_name, task_detail, deadline, complete_flag) VALUES (?, ?, ?, 0)",
       )
       .bind(task_name, task_detail, deadline)
       .run();

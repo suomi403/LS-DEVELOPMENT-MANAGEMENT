@@ -14,7 +14,7 @@ async function getCompletedTasks() {
 
     const { results } = await db
       .prepare(
-        "SELECT * FROM tasks WHERE is_completed = 1 ORDER BY complete_date DESC",
+        "SELECT * FROM tasks WHERE complete_flag = 1 AND delete_flag = 0 ORDER BY complete_date DESC",
       )
       .all();
     return results;
